@@ -27,11 +27,8 @@ function createWindow() {
   mainWindow.loadURL(url);
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https://checkout.stripe.com') || url.startsWith('https://billing.stripe.com')) {
-      shell.openExternal(url);
-      return { action: 'deny' };
-    }
-    return { action: 'allow' };
+    shell.openExternal(url);
+    return { action: 'deny' };
   });
 
   if (isDev) {

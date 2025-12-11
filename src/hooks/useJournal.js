@@ -1,44 +1,32 @@
-import { useState, useCallback } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { encrypt, decrypt } from '../lib/crypto';
+import { useState, useCallback, useEffect } from 'react';
 
+const STORAGE_KEY = 'microlog_data';
 const EMPTY_DATA = { entries: {}, dreams: {}, notes: [], ideas: [], wisdom: [] };
 
-export function useJournal(user, cryptoKey) {
+export function useJournal() {
   const [data, setData] = useState(EMPTY_DATA);
   const [loading, setLoading] = useState(true);
 
-  const loadData = useCallback(async (key) => {
-    if (!user || !key) return;
-    setLoading(true);
-    try {
-      const docRef = doc(db, 'journals', user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists() && docSnap.data().encrypted) {
-        const decrypted = await decrypt(docSnap.data().encrypted, key);
-        setData(decrypted);
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setData(JSON.parse(stored));
+      } catch (e) {
+        console.error('Error loading data:', e);
       }
-    } catch (e) {
-      console.error('Error loading data:', e);
     }
     setLoading(false);
-  }, [user]);
+  }, []);
 
-  const saveData = useCallback(async (newData) => {
+  const saveData = useCallback((newData) => {
     setData(newData);
-    if (user && cryptoKey) {
-      try {
-        const encrypted = await encrypt(newData, cryptoKey);
-        await setDoc(doc(db, 'journals', user.uid), {
-          encrypted,
-          updatedAt: new Date().toISOString()
-        });
-      } catch (e) {
-        console.error('Error saving data:', e);
-      }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+    } catch (e) {
+      console.error('Error saving data:', e);
     }
-  }, [user, cryptoKey]);
+  }, []);
 
   const addEntry = useCallback((view, currentDate, text) => {
     if (!text.trim()) return;
@@ -63,7 +51,7 @@ export function useJournal(user, cryptoKey) {
     } else if (view === 'wisdom') {
       newData = { ...data, wisdom: [...data.wisdom, entry] };
     }
-    
+
     if (newData) saveData(newData);
     return true;
   }, [data, saveData]);
@@ -93,7 +81,8 @@ export function useJournal(user, cryptoKey) {
 
   const reset = useCallback(() => {
     setData(EMPTY_DATA);
+    localStorage.removeItem(STORAGE_KEY);
   }, []);
 
-  return { data, loading, loadData, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reset };
+  return { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reset };
 }
