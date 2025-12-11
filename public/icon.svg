@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3a3a3a"/>
+      <stop offset="100%" style="stop-color:#2a2a2a"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowStrong" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Document background with folded corner -->
+  <path d="M40 40 L400 40 L472 112 L472 472 L40 472 Z" fill="url(#bgGrad)" rx="20"/>
+
+  <!-- Folded corner -->
+  <path d="M400 40 L400 112 L472 112 Z" fill="#4a4a4a"/>
+
+  <!-- Left curly brace { -->
+  <g filter="url(#glowStrong)">
+    <path d="M130 180
+             Q110 180 110 200
+             L110 235
+             Q110 256 90 256
+             Q110 256 110 277
+             L110 312
+             Q110 332 130 332"
+          fill="none"
+          stroke="#00d4ff"
+          stroke-width="14"
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- Right curly brace } -->
+  <g filter="url(#glowStrong)">
+    <path d="M382 180
+             Q402 180 402 200
+             L402 235
+             Q402 256 422 256
+             Q402 256 402 277
+             L402 312
+             Q402 332 382 332"
+          fill="none"
+          stroke="#00d4ff"
+          stroke-width="14"
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- Text lines -->
+  <line x1="175" y1="220" x2="337" y2="220" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <line x1="175" y1="256" x2="310" y2="256" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+  <line x1="175" y1="292" x2="280" y2="292" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Cursor -->
+  <line x1="290" y1="285" x2="290" y2="300" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+</svg>
