@@ -30,7 +30,7 @@ export default function App() {
   const [filter, setFilter] = useState(null);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const { vaultPath, loading: vaultLoading, isConfigured, isElectron, clearVault } = useVault();
+  const { vaultPath, loading: vaultLoading, isConfigured, isElectron, configureVault, clearVault } = useVault();
   const { data, loading: dataLoading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reload } = useJournal();
 
   const handleAddEntry = () => { if (addEntry(view, currentDate, newEntry)) setNewEntry(''); };
@@ -68,9 +68,13 @@ export default function App() {
   }, [darkMode]);
 
   const handleSetupComplete = useCallback(async (path) => {
-    // Reload data after vault is configured
-    await reload();
-  }, [reload]);
+    // Configure vault and reload data
+    const result = await configureVault(path);
+    if (result.success) {
+      await reload();
+    }
+    return result;
+  }, [configureVault, reload]);
 
   const handleChangeVault = useCallback(async () => {
     if (confirm('Are you sure you want to change vault location? Your current data will remain in its location.')) {
