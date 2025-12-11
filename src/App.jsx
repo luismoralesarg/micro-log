@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { useJournal } from './hooks/useJournal';
+import { useVault } from './hooks/useVault';
 
+import { SetupView } from './views/SetupView';
 import { JournalView } from './views/JournalView';
 import { DreamsView } from './views/DreamsView';
 import { TagsView } from './views/TagsView';
@@ -28,7 +30,8 @@ export default function App() {
   const [filter, setFilter] = useState(null);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus } = useJournal();
+  const { vaultPath, loading: vaultLoading, isConfigured, isElectron, clearVault } = useVault();
+  const { data, loading: dataLoading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reload } = useJournal();
 
   const handleAddEntry = () => { if (addEntry(view, currentDate, newEntry)) setNewEntry(''); };
   const changeDate = (days) => { const d = new Date(currentDate); d.setDate(d.getDate() + days); setCurrentDate(d.toISOString().split('T')[0]); };
@@ -64,6 +67,17 @@ export default function App() {
     });
   }, [darkMode]);
 
+  const handleSetupComplete = useCallback(async (path) => {
+    // Reload data after vault is configured
+    await reload();
+  }, [reload]);
+
+  const handleChangeVault = useCallback(async () => {
+    if (confirm('Are you sure you want to change vault location? Your current data will remain in its location.')) {
+      await clearVault();
+    }
+  }, [clearVault]);
+
   const tags = extractItems('#');
   const people = extractItems('@');
 
@@ -73,7 +87,20 @@ export default function App() {
   const text = darkMode ? 'text-neutral-100' : 'text-neutral-900';
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
 
-  if (loading) return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  // Show loading while checking vault configuration
+  if (vaultLoading) {
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  }
+
+  // Show setup view if vault not configured (Electron only)
+  if (isElectron && !isConfigured) {
+    return <SetupView darkMode={darkMode} onSetupComplete={handleSetupComplete} />;
+  }
+
+  // Show loading while data is loading
+  if (dataLoading) {
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  }
 
   return (
     <div className={`min-h-screen ${bg} pb-16 transition-colors`}>
@@ -82,8 +109,18 @@ export default function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h1 className={`text-sm font-mono ${text}`}>micro.log</h1>
+              {isElectron && vaultPath && (
+                <span className={`text-xs font-mono ${textMuted} hidden sm:inline`} title={vaultPath}>
+                  [{vaultPath.split('/').pop() || vaultPath.split('\\').pop()}]
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-4">
+              {isElectron && (
+                <button onClick={handleChangeVault} className={`text-xs ${textMuted} font-mono hover:${text}`} title="Change vault location">
+                  vault
+                </button>
+              )}
               <button onClick={() => setDarkMode(!darkMode)} className={`text-xs ${textMuted} font-mono`}>{darkMode ? 'light' : 'dark'}</button>
             </div>
           </div>
