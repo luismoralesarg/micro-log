@@ -1,51 +1,46 @@
 # micro.log
 
-Zero-knowledge encrypted micro-journaling app.
+Simple micro-journaling app for desktop and web.
 
 ## Features
 
-- 📖 Daily log with bullet-style entries
-- 🏷️ Tags (#project) and mentions (@person)
-- 🌙 Dreams journal
-- 📝 Notes for longer content
-- 💡 Ideas tracker with status
-- ✨ Quotes collection
-- 📊 Stats and insights
-- 🔒 End-to-end encryption
-- 🌓 Dark/light mode
-- 💳 Stripe subscriptions ($2/month, 14-day trial)
+- Daily log with bullet-style entries
+- Tags (#project) and mentions (@person)
+- Dreams journal
+- Notes for longer content
+- Ideas tracker with status
+- Quotes collection
+- Stats and insights
+- Dark/light mode
+- Data stored locally in browser
 
 ## Quick Start
 
 ```bash
 # Install dependencies
 npm install
-cd functions && npm install && cd ..
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your Firebase & Stripe keys
-
-# Run development
+# Run web development
 npm run dev
 
 # Run desktop app
 npm run electron:dev
 ```
 
-## Setup
+## Build
 
-1. Create Firebase project and enable Auth + Firestore
-2. Create Stripe product ($2/month)
-3. Configure webhook in Stripe Dashboard
-4. Add environment variables
-5. Deploy: `npm run deploy`
+```bash
+# Build web app
+npm run build
 
-## Security
+# Build desktop app
+npm run electron:build
 
-All data is encrypted client-side with AES-256-GCM.  
-The server only stores encrypted blobs.  
-**If you lose your passphrase, data cannot be recovered.**
+# Platform-specific builds
+npm run electron:build:mac
+npm run electron:build:win
+npm run electron:build:linux
+```
 
 ## License
 

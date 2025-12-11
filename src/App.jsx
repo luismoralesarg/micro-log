@@ -1,14 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db } from './lib/firebase';
-import { deriveKey, generateSalt, uint8ToBase64, base64ToUint8, hashPassphrase } from './lib/crypto';
-import { useSubscription } from './hooks/useSubscription';
+import { useState, useCallback } from 'react';
 import { useJournal } from './hooks/useJournal';
-
-import { AuthScreen } from './components/AuthScreen';
-import { PassphraseSetup } from './components/PassphraseSetup';
-import { Paywall, TrialBanner, SubscriptionBadge } from './components/Paywall';
 
 import { JournalView } from './views/JournalView';
 import { DreamsView } from './views/DreamsView';
@@ -31,77 +22,14 @@ const modules = [
 ];
 
 export default function App() {
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true);
-  const [cryptoKey, setCryptoKey] = useState(null);
-  const [needsPassphrase, setNeedsPassphrase] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(false);
-  const [userSalt, setUserSalt] = useState(null);
-
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
   const [newEntry, setNewEntry] = useState('');
   const [view, setView] = useState('journal');
   const [filter, setFilter] = useState(null);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const { subscription, loading: subLoading, subscribe, manageSubscription } = useSubscription(user);
-  const { data, loading: dataLoading, loadData, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reset } = useJournal(user, cryptoKey);
+  const { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus } = useJournal();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-        const metaRef = doc(db, 'users', user.uid);
-        const metaSnap = await getDoc(metaRef);
-        if (metaSnap.exists()) {
-          setUserSalt(base64ToUint8(metaSnap.data().salt));
-          setIsNewUser(false);
-        } else {
-          setIsNewUser(true);
-        }
-        setNeedsPassphrase(true);
-      } else {
-        setCryptoKey(null);
-        setNeedsPassphrase(false);
-      }
-      setAuthLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  const handlePassphrase = async (passphrase) => {
-    if (isNewUser) {
-      const salt = generateSalt();
-      const hash = await hashPassphrase(passphrase, salt);
-      const trialEndsAt = new Date();
-      trialEndsAt.setDate(trialEndsAt.getDate() + 14);
-
-      await setDoc(doc(db, 'users', user.uid), {
-        salt: uint8ToBase64(salt),
-        passphraseHash: hash,
-        createdAt: new Date().toISOString(),
-        subscription: { status: 'trialing', trialEndsAt: trialEndsAt.toISOString() }
-      });
-
-      const key = await deriveKey(passphrase, salt);
-      setCryptoKey(key);
-      setNeedsPassphrase(false);
-    } else {
-      const metaRef = doc(db, 'users', user.uid);
-      const metaSnap = await getDoc(metaRef);
-      const storedHash = metaSnap.data().passphraseHash;
-      const hash = await hashPassphrase(passphrase, userSalt);
-
-      if (hash !== storedHash) throw new Error('incorrect passphrase');
-
-      const key = await deriveKey(passphrase, userSalt);
-      setCryptoKey(key);
-      setNeedsPassphrase(false);
-      await loadData(key);
-    }
-  };
-
-  const handleSignOut = async () => { await signOut(auth); reset(); setCryptoKey(null); };
   const handleAddEntry = () => { if (addEntry(view, currentDate, newEntry)) setNewEntry(''); };
   const changeDate = (days) => { const d = new Date(currentDate); d.setDate(d.getDate() + days); setCurrentDate(d.toISOString().split('T')[0]); };
 
@@ -145,27 +73,18 @@ export default function App() {
   const text = darkMode ? 'text-neutral-100' : 'text-neutral-900';
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
 
-  if (authLoading || subLoading) return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
-  if (!user) return <AuthScreen darkMode={darkMode} />;
-  if (needsPassphrase) return <PassphraseSetup darkMode={darkMode} onComplete={handlePassphrase} isNew={isNewUser} />;
-  if (subscription && !subscription.isActive) return <Paywall darkMode={darkMode} subscription={subscription} onSubscribe={subscribe} onLogout={handleSignOut} />;
-  if (dataLoading) return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>decrypting...</div></div>;
+  if (loading) return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
 
   return (
     <div className={`min-h-screen ${bg} pb-16 transition-colors`}>
-      {subscription?.status === 'trialing' && <TrialBanner darkMode={darkMode} daysLeft={subscription.daysLeft} onSubscribe={subscribe} />}
-
       <header className={`${bgCard} border-b ${border} sticky top-0 z-20`}>
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h1 className={`text-sm font-mono ${text}`}>micro.log</h1>
-              <span className={`text-xs font-mono px-1.5 py-0.5 rounded ${darkMode ? 'bg-green-900 text-green-400' : 'bg-green-100 text-green-700'}`}>e2e</span>
-              <SubscriptionBadge darkMode={darkMode} subscription={subscription} onManage={manageSubscription} />
             </div>
             <div className="flex items-center gap-4">
               <button onClick={() => setDarkMode(!darkMode)} className={`text-xs ${textMuted} font-mono`}>{darkMode ? 'light' : 'dark'}</button>
-              <button onClick={handleSignOut} className={`text-xs ${textMuted} hover:text-red-500 font-mono`}>logout</button>
             </div>
           </div>
           <nav className="flex gap-1 mt-4 overflow-x-auto pb-1 -mb-1">
