@@ -30,10 +30,8 @@ export function SetupView({ darkMode, onSetupComplete }) {
     setError(null);
 
     try {
-      const result = await window.electronAPI.setVaultPath(selectedPath);
-      if (result.success) {
-        onSetupComplete(selectedPath);
-      } else {
+      const result = await onSetupComplete(selectedPath);
+      if (!result.success) {
         setError(result.error || 'Failed to create vault');
       }
     } catch (e) {
