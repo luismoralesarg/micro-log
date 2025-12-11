@@ -1,6 +1,8 @@
 {
   "name": "micro-log",
   "version": "1.0.0",
+  "description": "A minimalist journaling app for quick daily logs",
+  "author": "micro.log team",
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
