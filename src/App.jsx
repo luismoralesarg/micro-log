@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useJournal } from './hooks/useJournal';
+import { FolderSetup } from './components/FolderSetup';
 
 import { JournalView } from './views/JournalView';
 import { DreamsView } from './views/DreamsView';
@@ -22,13 +23,45 @@ const modules = [
 ];
 
 export default function App() {
+  const [storageMode, setStorageMode] = useState(null);
+  const [checkingStorage, setCheckingStorage] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
   const [newEntry, setNewEntry] = useState('');
   const [view, setView] = useState('journal');
   const [filter, setFilter] = useState(null);
   const [darkMode, setDarkMode] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  const { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus } = useJournal();
+  const isElectron = !!window.electronAPI;
+
+  // Check for existing storage configuration on mount
+  useEffect(() => {
+    const checkStorage = async () => {
+      if (window.electronAPI) {
+        const folder = await window.electronAPI.getDataFolder();
+        if (folder) {
+          setStorageMode(folder);
+        }
+      } else {
+        // Web mode - check if we have localStorage data or just use it directly
+        setStorageMode('localStorage');
+      }
+      setCheckingStorage(false);
+    };
+    checkStorage();
+  }, []);
+
+  const { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus } = useJournal(storageMode);
+
+  const handleFolderSelected = (folder) => {
+    setStorageMode(folder);
+  };
+
+  const handleChangeFolder = async () => {
+    if (window.electronAPI) {
+      await window.electronAPI.clearDataFolder();
+      setStorageMode(null);
+    }
+  };
 
   const handleAddEntry = () => { if (addEntry(view, currentDate, newEntry)) setNewEntry(''); };
   const changeDate = (days) => { const d = new Date(currentDate); d.setDate(d.getDate() + days); setCurrentDate(d.toISOString().split('T')[0]); };
@@ -73,7 +106,17 @@ export default function App() {
   const text = darkMode ? 'text-neutral-100' : 'text-neutral-900';
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
 
-  if (loading) return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  if (checkingStorage) {
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  }
+
+  if (!storageMode) {
+    return <FolderSetup darkMode={darkMode} onFolderSelected={handleFolderSelected} isElectron={isElectron} />;
+  }
+
+  if (loading) {
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  }
 
   return (
     <div className={`min-h-screen ${bg} pb-16 transition-colors`}>
@@ -82,8 +125,18 @@ export default function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h1 className={`text-sm font-mono ${text}`}>micro.log</h1>
+              {isElectron && storageMode !== 'localStorage' && (
+                <span className={`text-xs font-mono px-1.5 py-0.5 rounded ${darkMode ? 'bg-green-900 text-green-400' : 'bg-green-100 text-green-700'}`}>
+                  file
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-4">
+              {isElectron && (
+                <button onClick={handleChangeFolder} className={`text-xs ${textMuted} hover:${text} font-mono`}>
+                  folder
+                </button>
+              )}
               <button onClick={() => setDarkMode(!darkMode)} className={`text-xs ${textMuted} font-mono`}>{darkMode ? 'light' : 'dark'}</button>
             </div>
           </div>

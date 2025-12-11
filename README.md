@@ -12,7 +12,12 @@ Simple micro-journaling app for desktop and web.
 - Quotes collection
 - Stats and insights
 - Dark/light mode
-- Data stored locally in browser
+
+## Storage
+
+**Desktop (Electron):** Choose any folder on your computer. Data is saved as `microlog-data.json`. Sync with Dropbox, iCloud, or any cloud service.
+
+**Web:** Data is stored in browser localStorage.
 
 ## Quick Start
 

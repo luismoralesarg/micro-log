@@ -3,30 +3,50 @@ import { useState, useCallback, useEffect } from 'react';
 const STORAGE_KEY = 'microlog_data';
 const EMPTY_DATA = { entries: {}, dreams: {}, notes: [], ideas: [], wisdom: [] };
 
-export function useJournal() {
+export function useJournal(storageMode) {
   const [data, setData] = useState(EMPTY_DATA);
   const [loading, setLoading] = useState(true);
 
+  const isElectronFile = storageMode && storageMode !== 'localStorage' && window.electronAPI;
+
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
+    const loadData = async () => {
+      setLoading(true);
       try {
-        setData(JSON.parse(stored));
+        if (isElectronFile) {
+          const fileData = await window.electronAPI.readData();
+          if (fileData) {
+            setData(fileData);
+          }
+        } else {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            setData(JSON.parse(stored));
+          }
+        }
       } catch (e) {
         console.error('Error loading data:', e);
       }
-    }
-    setLoading(false);
-  }, []);
+      setLoading(false);
+    };
 
-  const saveData = useCallback((newData) => {
+    if (storageMode) {
+      loadData();
+    }
+  }, [storageMode, isElectronFile]);
+
+  const saveData = useCallback(async (newData) => {
     setData(newData);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+      if (isElectronFile) {
+        await window.electronAPI.writeData(newData);
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+      }
     } catch (e) {
       console.error('Error saving data:', e);
     }
-  }, []);
+  }, [isElectronFile]);
 
   const addEntry = useCallback((view, currentDate, text) => {
     if (!text.trim()) return;
@@ -81,8 +101,10 @@ export function useJournal() {
 
   const reset = useCallback(() => {
     setData(EMPTY_DATA);
-    localStorage.removeItem(STORAGE_KEY);
-  }, []);
+    if (!isElectronFile) {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [isElectronFile]);
 
   return { data, loading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reset };
 }
