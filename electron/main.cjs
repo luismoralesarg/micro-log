@@ -147,6 +147,24 @@ ipcMain.handle('clear-vault-path', () => {
   }
 });
 
+// Get language
+ipcMain.handle('get-language', () => {
+  const config = readConfig();
+  return config.language || 'en';
+});
+
+// Set language
+ipcMain.handle('set-language', (event, lang) => {
+  try {
+    const config = readConfig();
+    config.language = lang;
+    writeConfig(config);
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+});
+
 // Read file
 ipcMain.handle('read-file', (event, relativePath) => {
   try {

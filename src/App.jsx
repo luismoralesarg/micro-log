@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useJournal } from './hooks/useJournal';
 import { useVault } from './hooks/useVault';
+import { useLanguage } from './contexts/LanguageContext';
 
 import { SetupView } from './views/SetupView';
 import { JournalView } from './views/JournalView';
@@ -13,14 +14,14 @@ import { WisdomView } from './views/WisdomView';
 import { InsightsView } from './views/InsightsView';
 
 const modules = [
-  { id: 'journal', label: 'log' },
-  { id: 'dreams', label: 'dreams' },
-  { id: 'tags', label: 'tags' },
-  { id: 'people', label: 'people' },
-  { id: 'notes', label: 'notes' },
-  { id: 'ideas', label: 'ideas' },
-  { id: 'wisdom', label: 'quotes' },
-  { id: 'insights', label: 'stats' },
+  { id: 'journal', labelKey: 'nav.log' },
+  { id: 'dreams', labelKey: 'nav.dreams' },
+  { id: 'tags', labelKey: 'nav.tags' },
+  { id: 'people', labelKey: 'nav.people' },
+  { id: 'notes', labelKey: 'nav.notes' },
+  { id: 'ideas', labelKey: 'nav.ideas' },
+  { id: 'wisdom', labelKey: 'nav.quotes' },
+  { id: 'insights', labelKey: 'nav.stats' },
 ];
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
 
   const { vaultPath, loading: vaultLoading, isConfigured, isElectron, configureVault, clearVault } = useVault();
   const { data, loading: dataLoading, addEntry, toggleHighlight, deleteItem, updateIdeaStatus, reload } = useJournal();
+  const { t, language, setLanguage, getLocale, loading: langLoading } = useLanguage();
 
   const handleAddEntry = () => { if (addEntry(view, currentDate, newEntry)) setNewEntry(''); };
   const changeDate = (days) => { const d = new Date(currentDate); d.setDate(d.getDate() + days); setCurrentDate(d.toISOString().split('T')[0]); };
@@ -40,10 +42,10 @@ export default function App() {
     const date = new Date(dateStr + 'T12:00:00');
     const today = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-    if (dateStr === today) return 'today';
-    if (dateStr === yesterday) return 'yesterday';
-    return date.toLocaleDateString('en', { month: 'short', day: 'numeric' }).toLowerCase();
-  }, []);
+    if (dateStr === today) return t('dates.today');
+    if (dateStr === yesterday) return t('dates.yesterday');
+    return date.toLocaleDateString(getLocale(), { month: 'short', day: 'numeric' }).toLowerCase();
+  }, [t, getLocale]);
 
   const extractItems = useCallback((prefix) => {
     const items = {};
@@ -77,10 +79,14 @@ export default function App() {
   }, [configureVault, reload]);
 
   const handleChangeVault = useCallback(async () => {
-    if (confirm('Are you sure you want to change vault location? Your current data will remain in its location.')) {
+    if (confirm(t('confirm.changeVault'))) {
       await clearVault();
     }
-  }, [clearVault]);
+  }, [clearVault, t]);
+
+  const toggleLanguage = useCallback(() => {
+    setLanguage(language === 'en' ? 'es' : 'en');
+  }, [language, setLanguage]);
 
   const tags = extractItems('#');
   const people = extractItems('@');
@@ -91,9 +97,9 @@ export default function App() {
   const text = darkMode ? 'text-neutral-100' : 'text-neutral-900';
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
 
-  // Show loading while checking vault configuration
-  if (vaultLoading) {
-    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+  // Show loading while checking vault configuration or language
+  if (vaultLoading || langLoading) {
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>{t('app.loading')}</div></div>;
   }
 
   // Show setup view if vault not configured (Electron only)
@@ -103,7 +109,7 @@ export default function App() {
 
   // Show loading while data is loading
   if (dataLoading) {
-    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>loading...</div></div>;
+    return <div className={`min-h-screen ${bg} flex items-center justify-center`}><div className={`${textMuted} font-mono text-sm`}>{t('app.loading')}</div></div>;
   }
 
   return (
@@ -112,7 +118,7 @@ export default function App() {
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h1 className={`text-sm font-mono ${text}`}>micro.log</h1>
+              <h1 className={`text-sm font-mono ${text}`}>{t('app.name')}</h1>
               {isElectron && vaultPath && (
                 <span className={`text-xs font-mono ${textMuted} hidden sm:inline`} title={vaultPath}>
                   [{vaultPath.split('/').pop() || vaultPath.split('\\').pop()}]
@@ -120,19 +126,22 @@ export default function App() {
               )}
             </div>
             <div className="flex items-center gap-4">
+              <button onClick={toggleLanguage} className={`text-xs ${textMuted} font-mono hover:${text}`} title="Change language">
+                {language.toUpperCase()}
+              </button>
               {isElectron && (
                 <button onClick={handleChangeVault} className={`text-xs ${textMuted} font-mono hover:${text}`} title="Change vault location">
-                  vault
+                  {t('header.vault')}
                 </button>
               )}
-              <button onClick={() => setDarkMode(!darkMode)} className={`text-xs ${textMuted} font-mono`}>{darkMode ? 'light' : 'dark'}</button>
+              <button onClick={() => setDarkMode(!darkMode)} className={`text-xs ${textMuted} font-mono`}>{darkMode ? t('header.light') : t('header.dark')}</button>
             </div>
           </div>
           <nav className="flex gap-1 mt-4 overflow-x-auto pb-1 -mb-1">
             {modules.map(m => (
               <button key={m.id} onClick={() => { setView(m.id); setFilter(null); }}
                 className={`px-3 py-1.5 text-xs font-mono rounded transition-colors whitespace-nowrap ${view === m.id ? `${darkMode ? 'bg-neutral-800 text-neutral-100' : 'bg-neutral-900 text-white'}` : textMuted}`}>
-                {m.label}
+                {t(m.labelKey)}
               </button>
             ))}
           </nav>

@@ -1,7 +1,9 @@
 import { EntryItem } from '../components/ui/EntryItem';
 import { InputWithHighlight } from '../components/ui/InputWithHighlight';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function DreamsView({ data, currentDate, newEntry, setNewEntry, darkMode, formatDate, renderText, onAdd, onToggle, onDelete, onChangeDate }) {
+  const { t } = useLanguage();
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
   const dayDreams = data.dreams[currentDate] || [];
 
@@ -11,7 +13,7 @@ export function DreamsView({ data, currentDate, newEntry, setNewEntry, darkMode,
         <button onClick={() => onChangeDate(-1)} className={`p-2 ${textMuted}`}>←</button>
         <div className="text-center">
           <h2 className="text-sm font-mono text-indigo-400">{formatDate(currentDate)}</h2>
-          <p className={`text-xs ${textMuted} font-mono mt-0.5`}>dreams</p>
+          <p className={`text-xs ${textMuted} font-mono mt-0.5`}>{t('dreams.title')}</p>
         </div>
         <button onClick={() => onChangeDate(1)} className={`p-2 ${textMuted}`}>→</button>
       </div>
@@ -19,13 +21,13 @@ export function DreamsView({ data, currentDate, newEntry, setNewEntry, darkMode,
       <div className="mb-6">
         <div className="flex gap-3 items-center">
           <span className="text-indigo-400 text-xs">○</span>
-          <InputWithHighlight value={newEntry} onChange={setNewEntry} onSubmit={onAdd} placeholder="dream..." darkMode={darkMode} />
+          <InputWithHighlight value={newEntry} onChange={setNewEntry} onSubmit={onAdd} placeholder={t('dreams.placeholder')} darkMode={darkMode} />
         </div>
       </div>
 
       <div className="space-y-0">
         {dayDreams.length === 0 ? (
-          <p className={`text-center py-12 ${textMuted} text-sm font-mono`}>no dreams recorded</p>
+          <p className={`text-center py-12 ${textMuted} text-sm font-mono`}>{t('dreams.empty')}</p>
         ) : dayDreams.map(entry => (
           <EntryItem key={entry.id} entry={entry} date={currentDate} type="dreams" darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={onToggle} onDelete={onDelete} />
         ))}
