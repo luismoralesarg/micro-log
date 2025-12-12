@@ -2,7 +2,10 @@
   "name": "micro-log",
   "version": "1.0.0",
   "description": "Aplicación de registro de actividades",
-  "author": "Chengue",
+  "author": {
+    "name": "Chengue",
+    "email": "luismoralesarg@users.noreply.github.com"
+  },
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
