@@ -5,7 +5,7 @@
   },
   "nav": {
     "log": "diario",
-    "dreams": "sueños",
+    "dreams": "suenos",
     "tags": "etiquetas",
     "people": "personas",
     "notes": "notas",
@@ -14,7 +14,7 @@
     "stats": "stats"
   },
   "header": {
-    "vault": "bóveda",
+    "vault": "boveda",
     "light": "claro",
     "dark": "oscuro"
   },
@@ -29,16 +29,16 @@
     "we": "mi",
     "th": "ju",
     "fr": "vi",
-    "sa": "sá"
+    "sa": "sa"
   },
   "journal": {
     "placeholder": "escribe...",
     "empty": "sin entradas"
   },
   "dreams": {
-    "title": "sueños",
-    "placeholder": "soñé...",
-    "empty": "sin sueños registrados"
+    "title": "suenos",
+    "placeholder": "sone...",
+    "empty": "sin suenos registrados"
   },
   "tags": {
     "back": "volver",
@@ -46,25 +46,28 @@
   },
   "people": {
     "back": "volver",
-    "empty": "menciona @personas en tus entradas"
+    "empty": "menciona @personas en tus entradas",
+    "all": "Todos",
+    "groups": "Grupos",
+    "emptyGroups": "sin grupos aun"
   },
   "notes": {
     "placeholder": "escribe una nota...",
     "save": "guardar",
-    "empty": "sin notas aún",
+    "empty": "sin notas aun",
     "delete": "eliminar"
   },
   "ideas": {
     "placeholder": "nueva idea...",
-    "empty": "sin ideas aún",
+    "empty": "sin ideas aun",
     "statusNew": "nueva",
     "statusWip": "en progreso",
     "statusDone": "hecha"
   },
   "wisdom": {
-    "placeholder": "una cita, pensamiento o lección...",
+    "placeholder": "una cita, pensamiento o leccion...",
     "save": "guardar",
-    "empty": "colecciona sabiduría aquí"
+    "empty": "colecciona sabiduria aqui"
   },
   "insights": {
     "entries": "entradas",
@@ -72,9 +75,9 @@
     "starred": "destacadas",
     "streak": "racha",
     "best": "mejor",
-    "last30days": "últimos 30 días",
-    "byWeekday": "por día",
-    "dreams": "sueños",
+    "last30days": "ultimos 30 dias",
+    "byWeekday": "por dia",
+    "dreams": "suenos",
     "notes": "notas",
     "ideas": "ideas",
     "done": "hechas",
@@ -82,29 +85,54 @@
     "topTags": "top etiquetas",
     "topPeople": "top personas"
   },
+  "detail": {
+    "entries": "Entradas",
+    "insights": "Estadisticas",
+    "details": "Detalles",
+    "firstUsed": "Primera vez",
+    "lastUsed": "Ultima vez",
+    "frequency": "Frecuencia",
+    "week": "semana",
+    "highlightRate": "Tasa de destacados",
+    "mentionsThisMonth": "Menciones este mes",
+    "tagsThisMonth": "Etiquetas este mes",
+    "monthlyVariation": "Variacion mensual",
+    "weekdayDistribution": "Distribucion semanal",
+    "weekdayMinPerson": "El grafico estara disponible cuando hayas mencionado a esta persona al menos 5 veces.",
+    "weekdayMinTag": "El grafico estara disponible cuando hayas usado esta etiqueta al menos 5 veces.",
+    "daysAgo": "dias atras",
+    "allTime": "Todo el tiempo",
+    "about": "Acerca de",
+    "name": "Nombre",
+    "type": "Tipo",
+    "typePerson": "Persona",
+    "typeTag": "Etiqueta",
+    "totalMentions": "Total de menciones",
+    "highlighted": "Destacadas"
+  },
   "setup": {
     "welcome": "bienvenido a tu diario personal",
-    "description": "Elige dónde guardar tus entradas. Todos tus datos se guardarán como archivos locales que te pertenecen.",
-    "vaultLocation": "ubicación de bóveda",
-    "changeLocation": "cambiar ubicación",
+    "description": "Elige donde guardar tus entradas. Todos tus datos se guardaran como archivos locales que te pertenecen.",
+    "vaultLocation": "ubicacion de boveda",
+    "changeLocation": "cambiar ubicacion",
     "selectFolder": "seleccionar carpeta...",
-    "createVault": "crear bóveda",
-    "creatingVault": "creando bóveda...",
+    "createVault": "crear boveda",
+    "creatingVault": "creando boveda...",
     "failedToSelect": "Error al seleccionar carpeta",
-    "failedToCreate": "Error al crear bóveda",
-    "structureInfo": "esto creará la siguiente estructura:",
+    "failedToCreate": "Error al crear boveda",
+    "structureInfo": "esto creara la siguiente estructura:",
     "folderJournal": "entradas diarias",
-    "folderDreams": "diario de sueños",
-    "folderNotes": "notas rápidas",
+    "folderDreams": "diario de suenos",
+    "folderNotes": "notas rapidas",
     "folderIdeas": "seguimiento de ideas",
-    "folderWisdom": "citas y sabiduría",
-    "folderConfig": "configuración"
+    "folderWisdom": "citas y sabiduria",
+    "folderConfig": "configuracion"
   },
   "confirm": {
-    "changeVault": "¿Estás seguro de que quieres cambiar la ubicación de la bóveda? Tus datos actuales permanecerán en su ubicación."
+    "changeVault": "Estas seguro de que quieres cambiar la ubicacion de la boveda? Tus datos actuales permaneceran en su ubicacion."
   },
   "dialog": {
-    "selectVaultTitle": "Selecciona la carpeta para tu bóveda de micro.log",
-    "selectVaultButton": "Seleccionar ubicación"
+    "selectVaultTitle": "Selecciona la carpeta para tu boveda de micro.log",
+    "selectVaultButton": "Seleccionar ubicacion"
   }
 }

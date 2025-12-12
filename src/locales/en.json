@@ -46,7 +46,10 @@
   },
   "people": {
     "back": "back",
-    "empty": "mention @people in your entries"
+    "empty": "mention @people in your entries",
+    "all": "All",
+    "groups": "Groups",
+    "emptyGroups": "no groups yet"
   },
   "notes": {
     "placeholder": "write a note...",
@@ -81,6 +84,31 @@
     "quotes": "quotes",
     "topTags": "top tags",
     "topPeople": "top people"
+  },
+  "detail": {
+    "entries": "Entries",
+    "insights": "Insights",
+    "details": "Details",
+    "firstUsed": "First used",
+    "lastUsed": "Last used",
+    "frequency": "Frequency",
+    "week": "week",
+    "highlightRate": "Highlight rate",
+    "mentionsThisMonth": "Mentions this month",
+    "tagsThisMonth": "Tags this month",
+    "monthlyVariation": "Monthly variation",
+    "weekdayDistribution": "Weekday distribution",
+    "weekdayMinPerson": "The chart will be available once you've mentioned this person at least 5 times.",
+    "weekdayMinTag": "The chart will be available once you've used this tag at least 5 times.",
+    "daysAgo": "days ago",
+    "allTime": "All time",
+    "about": "About",
+    "name": "Name",
+    "type": "Type",
+    "typePerson": "Person",
+    "typeTag": "Tag",
+    "totalMentions": "Total mentions",
+    "highlighted": "Highlighted"
   },
   "setup": {
     "welcome": "welcome to your personal journal",

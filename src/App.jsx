@@ -151,8 +151,8 @@ export default function App() {
       <div className="max-w-2xl mx-auto px-4 py-6">
         {view === 'journal' && <JournalView data={data} currentDate={currentDate} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onAdd={handleAddEntry} onToggle={toggleHighlight} onDelete={deleteItem} onChangeDate={changeDate} />}
         {view === 'dreams' && <DreamsView data={data} currentDate={currentDate} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onAdd={handleAddEntry} onToggle={toggleHighlight} onDelete={deleteItem} onChangeDate={changeDate} />}
-        {view === 'tags' && <TagsView tags={tags} filter={filter} setFilter={setFilter} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={toggleHighlight} onDelete={deleteItem} />}
-        {view === 'people' && <PeopleView people={people} filter={filter} setFilter={setFilter} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={toggleHighlight} onDelete={deleteItem} />}
+        {view === 'tags' && <TagsView tags={tags} filter={filter} setFilter={setFilter} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={toggleHighlight} onDelete={deleteItem} allEntries={data.entries} />}
+        {view === 'people' && <PeopleView people={people} filter={filter} setFilter={setFilter} darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={toggleHighlight} onDelete={deleteItem} allEntries={data.entries} />}
         {view === 'notes' && <NotesView data={data} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} onAdd={handleAddEntry} onDelete={deleteItem} />}
         {view === 'ideas' && <IdeasView data={data} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} onAdd={handleAddEntry} onDelete={deleteItem} onUpdateStatus={updateIdeaStatus} />}
         {view === 'wisdom' && <WisdomView data={data} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} onAdd={handleAddEntry} onDelete={deleteItem} onToggle={toggleHighlight} />}
