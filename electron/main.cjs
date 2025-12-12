@@ -4,6 +4,36 @@ const fs = require('fs');
 
 const isDev = !app.isPackaged;
 
+// Security: Allowed protocols for external URLs
+const ALLOWED_PROTOCOLS = ['https:', 'http:', 'mailto:'];
+
+// Security: Validate path to prevent path traversal attacks
+function isPathSafe(basePath, relativePath) {
+  if (!basePath || !relativePath) return false;
+
+  // Normalize paths to prevent traversal attacks
+  const normalizedBase = path.resolve(basePath);
+  const fullPath = path.resolve(basePath, relativePath);
+
+  // Ensure the resolved path starts with the base path
+  return fullPath.startsWith(normalizedBase + path.sep) || fullPath === normalizedBase;
+}
+
+// Security: Validate and sanitize relative path
+function sanitizePath(relativePath) {
+  if (typeof relativePath !== 'string') return null;
+
+  // Remove null bytes and other dangerous characters
+  const sanitized = relativePath.replace(/\0/g, '');
+
+  // Check for obvious traversal patterns
+  if (sanitized.includes('..') || sanitized.startsWith('/') || sanitized.startsWith('\\')) {
+    return null;
+  }
+
+  return sanitized;
+}
+
 let mainWindow;
 
 // Config file path for storing vault location
@@ -95,8 +125,18 @@ function createWindow() {
 
   mainWindow.loadURL(url);
 
+  // Security: Validate URLs before opening externally
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    try {
+      const parsedUrl = new URL(url);
+      if (ALLOWED_PROTOCOLS.includes(parsedUrl.protocol)) {
+        shell.openExternal(url);
+      } else {
+        console.warn('Blocked external URL with disallowed protocol:', parsedUrl.protocol);
+      }
+    } catch (e) {
+      console.error('Invalid URL blocked:', url);
+    }
     return { action: 'deny' };
   });
 
@@ -180,7 +220,13 @@ ipcMain.handle('read-file', (event, relativePath) => {
     const vaultPath = getVaultPath();
     if (!vaultPath) return { success: false, error: 'No vault configured' };
 
-    const fullPath = path.join(vaultPath, relativePath);
+    // Security: Sanitize and validate path
+    const sanitized = sanitizePath(relativePath);
+    if (!sanitized || !isPathSafe(vaultPath, sanitized)) {
+      return { success: false, error: 'Invalid path' };
+    }
+
+    const fullPath = path.join(vaultPath, sanitized);
     if (!fs.existsSync(fullPath)) {
       return { success: true, content: null };
     }
@@ -198,7 +244,13 @@ ipcMain.handle('write-file', (event, relativePath, content) => {
     const vaultPath = getVaultPath();
     if (!vaultPath) return { success: false, error: 'No vault configured' };
 
-    const fullPath = path.join(vaultPath, relativePath);
+    // Security: Sanitize and validate path
+    const sanitized = sanitizePath(relativePath);
+    if (!sanitized || !isPathSafe(vaultPath, sanitized)) {
+      return { success: false, error: 'Invalid path' };
+    }
+
+    const fullPath = path.join(vaultPath, sanitized);
     const dir = path.dirname(fullPath);
 
     // Ensure directory exists
@@ -217,7 +269,13 @@ ipcMain.handle('delete-file', (event, relativePath) => {
     const vaultPath = getVaultPath();
     if (!vaultPath) return { success: false, error: 'No vault configured' };
 
-    const fullPath = path.join(vaultPath, relativePath);
+    // Security: Sanitize and validate path
+    const sanitized = sanitizePath(relativePath);
+    if (!sanitized || !isPathSafe(vaultPath, sanitized)) {
+      return { success: false, error: 'Invalid path' };
+    }
+
+    const fullPath = path.join(vaultPath, sanitized);
     if (fs.existsSync(fullPath)) {
       fs.unlinkSync(fullPath);
     }
@@ -233,7 +291,13 @@ ipcMain.handle('list-files', (event, relativePath) => {
     const vaultPath = getVaultPath();
     if (!vaultPath) return { success: false, error: 'No vault configured' };
 
-    const fullPath = path.join(vaultPath, relativePath);
+    // Security: Sanitize and validate path
+    const sanitized = sanitizePath(relativePath);
+    if (!sanitized || !isPathSafe(vaultPath, sanitized)) {
+      return { success: false, error: 'Invalid path' };
+    }
+
+    const fullPath = path.join(vaultPath, sanitized);
     if (!fs.existsSync(fullPath)) {
       return { success: true, files: [] };
     }
@@ -251,7 +315,13 @@ ipcMain.handle('ensure-dir', (event, relativePath) => {
     const vaultPath = getVaultPath();
     if (!vaultPath) return { success: false, error: 'No vault configured' };
 
-    const fullPath = path.join(vaultPath, relativePath);
+    // Security: Sanitize and validate path
+    const sanitized = sanitizePath(relativePath);
+    if (!sanitized || !isPathSafe(vaultPath, sanitized)) {
+      return { success: false, error: 'Invalid path' };
+    }
+
+    const fullPath = path.join(vaultPath, sanitized);
     ensureDir(fullPath);
     return { success: true };
   } catch (e) {
