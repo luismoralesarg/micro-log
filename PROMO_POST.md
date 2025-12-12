@@ -12,6 +12,8 @@ I launched micro.log — a minimalist micro-journaling app for desktop and web.
 
 Available for macOS, Windows and Linux.
 
+Would love for you to try it out and share your feedback!
+
 https://github.com/luismoralesarg/micro-log
 ```
 
