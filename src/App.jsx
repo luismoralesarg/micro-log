@@ -69,9 +69,21 @@ export default function App() {
   }, [data.entries]);
 
   const renderText = useCallback((text) => {
+    // Extract clean tag/mention (only valid characters: word chars and hyphens)
+    const extractCleanTag = (word, prefix) => {
+      const match = word.match(new RegExp(`^${escapeRegex(prefix)}[\\w-]+`));
+      return match ? match[0] : word;
+    };
+
     return text.split(/(\s+)/).map((word, i) => {
-      if (word.startsWith('#')) return <span key={i} className={`${darkMode ? 'text-cyan-400' : 'text-cyan-600'} cursor-pointer hover:underline`} onClick={() => { setFilter(word); setView('tags'); }}>{word}</span>;
-      if (word.startsWith('@')) return <span key={i} className={`${darkMode ? 'text-amber-400' : 'text-amber-600'} cursor-pointer hover:underline`} onClick={() => { setFilter(word); setView('people'); }}>{word}</span>;
+      if (word.startsWith('#')) {
+        const cleanTag = extractCleanTag(word, '#');
+        return <span key={i} className={`${darkMode ? 'text-cyan-400' : 'text-cyan-600'} cursor-pointer hover:underline`} onClick={() => { setFilter(cleanTag); setView('tags'); }}>{word}</span>;
+      }
+      if (word.startsWith('@')) {
+        const cleanMention = extractCleanTag(word, '@');
+        return <span key={i} className={`${darkMode ? 'text-amber-400' : 'text-amber-600'} cursor-pointer hover:underline`} onClick={() => { setFilter(cleanMention); setView('people'); }}>{word}</span>;
+      }
       return word;
     });
   }, [darkMode]);
