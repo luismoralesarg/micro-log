@@ -196,6 +196,23 @@ ipcMain.handle('clear-vault-path', () => {
   }
 });
 
+// Open external URL in default browser
+ipcMain.handle('open-external', async (event, url) => {
+  try {
+    const parsedUrl = new URL(url);
+    if (ALLOWED_PROTOCOLS.includes(parsedUrl.protocol)) {
+      await shell.openExternal(url);
+      return { success: true };
+    } else {
+      console.warn('Blocked external URL with disallowed protocol:', parsedUrl.protocol);
+      return { success: false, error: 'Protocol not allowed' };
+    }
+  } catch (e) {
+    console.error('Invalid URL blocked:', url, e.message);
+    return { success: false, error: e.message };
+  }
+});
+
 // Get language
 ipcMain.handle('get-language', () => {
   const config = readConfig();

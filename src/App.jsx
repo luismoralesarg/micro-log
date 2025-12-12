@@ -68,11 +68,29 @@ export default function App() {
     return Object.entries(items).sort((a, b) => b[1].count - a[1].count);
   }, [data.entries]);
 
+  // Open URL in default browser
+  const openUrl = useCallback((url) => {
+    // Ensure URL has protocol
+    const fullUrl = url.startsWith('www.') ? `https://${url}` : url;
+    // Use Electron API if available, otherwise fallback to window.open
+    if (window.electronAPI?.openExternal) {
+      window.electronAPI.openExternal(fullUrl);
+    } else {
+      window.open(fullUrl, '_blank', 'noopener,noreferrer');
+    }
+  }, []);
+
   const renderText = useCallback((text) => {
     // Extract clean tag/mention (only valid characters: word chars and hyphens)
     const extractCleanTag = (word, prefix) => {
       const match = word.match(new RegExp(`^${escapeRegex(prefix)}[\\w-]+`));
       return match ? match[0] : word;
+    };
+
+    // Extract clean URL (remove trailing punctuation)
+    const extractCleanUrl = (word) => {
+      const match = word.match(/^(https?:\/\/[^\s]+?|www\.[^\s]+?)(?=[.,;:!?)]*$|$)/i);
+      return match ? match[1] : word;
     };
 
     return text.split(/(\s+)/).map((word, i) => {
@@ -84,9 +102,25 @@ export default function App() {
         const cleanMention = extractCleanTag(word, '@');
         return <span key={i} className={`${darkMode ? 'text-amber-400' : 'text-amber-600'} cursor-pointer hover:underline`} onClick={() => { setFilter(cleanMention); setView('people'); }}>{word}</span>;
       }
+      // Check for URLs (http://, https://, or www.)
+      if (word.match(/^(https?:\/\/|www\.)/i)) {
+        const cleanUrl = extractCleanUrl(word);
+        const trailing = word.slice(cleanUrl.length);
+        return (
+          <span key={i}>
+            <span
+              className={`${darkMode ? 'text-violet-400' : 'text-violet-600'} cursor-pointer hover:underline`}
+              onClick={() => openUrl(cleanUrl)}
+            >
+              {cleanUrl}
+            </span>
+            {trailing}
+          </span>
+        );
+      }
       return word;
     });
-  }, [darkMode]);
+  }, [darkMode, openUrl]);
 
   const handleSetupComplete = useCallback(async (path) => {
     // Configure vault and reload data

@@ -19,6 +19,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getLanguage: () => ipcRenderer.invoke('get-language'),
   setLanguage: (lang) => ipcRenderer.invoke('set-language', lang),
 
+  // External links
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
+
   // Check if running in Electron
   isElectron: true
 });

@@ -7,6 +7,7 @@ export function InputWithHighlight({ value, onChange, onSubmit, placeholder, dar
     return value.split(/(\s+)/).map((word, i) => {
       if (word.startsWith('#')) return <span key={i} className={darkMode ? 'text-cyan-400' : 'text-cyan-600'}>{word}</span>;
       if (word.startsWith('@')) return <span key={i} className={darkMode ? 'text-amber-400' : 'text-amber-600'}>{word}</span>;
+      if (word.match(/^(https?:\/\/|www\.)/i)) return <span key={i} className={darkMode ? 'text-violet-400' : 'text-violet-600'}>{word}</span>;
       return <span key={i} className={text}>{word}</span>;
     });
   };
