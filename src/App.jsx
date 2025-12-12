@@ -3,6 +3,11 @@ import { useJournal } from './hooks/useJournal';
 import { useVault } from './hooks/useVault';
 import { useLanguage } from './contexts/LanguageContext';
 
+// Security: Escape special regex characters to prevent ReDoS
+function escapeRegex(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 import { SetupView } from './views/SetupView';
 import { JournalView } from './views/JournalView';
 import { DreamsView } from './views/DreamsView';
@@ -49,9 +54,11 @@ export default function App() {
 
   const extractItems = useCallback((prefix) => {
     const items = {};
+    // Security: Escape regex special characters in prefix
+    const escapedPrefix = escapeRegex(prefix);
     Object.entries(data.entries).forEach(([date, dayEntries]) => {
       dayEntries.forEach(entry => {
-        (entry.text.match(new RegExp(`${prefix}[\\w-]+`, 'g')) || []).forEach(match => {
+        (entry.text.match(new RegExp(`${escapedPrefix}[\\w-]+`, 'g')) || []).forEach(match => {
           if (!items[match]) items[match] = { count: 0, entries: [] };
           items[match].count++;
           items[match].entries.push({ ...entry, date });

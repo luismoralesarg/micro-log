@@ -2,6 +2,30 @@ import { useState, useCallback, useEffect } from 'react';
 
 const EMPTY_DATA = { entries: {}, dreams: {}, notes: [], ideas: [], wisdom: [] };
 
+// Security: Maximum entry length to prevent DoS
+const MAX_ENTRY_LENGTH = 10000;
+
+// Security: Sanitize text input by removing control characters
+function sanitizeText(text) {
+  if (typeof text !== 'string') return '';
+
+  // Truncate if too long
+  const truncated = text.length > MAX_ENTRY_LENGTH ? text.substring(0, MAX_ENTRY_LENGTH) : text;
+
+  // Remove control characters except newlines and tabs
+  return truncated.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+}
+
+// Security: Validate date format (YYYY-MM-DD)
+function isValidDate(dateStr) {
+  if (typeof dateStr !== 'string') return false;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateStr)) return false;
+
+  const date = new Date(dateStr);
+  return date instanceof Date && !isNaN(date);
+}
+
 // Check if running in Electron with filesystem access
 const isElectron = () => {
   return typeof window !== 'undefined' && window.electronAPI?.isElectron;
@@ -141,11 +165,19 @@ export function useJournal() {
   }, []);
 
   const addEntry = useCallback(async (view, currentDate, text) => {
-    if (!text.trim()) return;
+    // Security: Validate and sanitize input
+    const sanitizedText = sanitizeText(text);
+    if (!sanitizedText.trim()) return;
+
+    // Security: Validate date for date-based entries
+    if ((view === 'journal' || view === 'dreams') && !isValidDate(currentDate)) {
+      console.error('Invalid date format');
+      return;
+    }
 
     const entry = {
       id: Date.now(),
-      text,
+      text: sanitizedText,
       highlight: false,
       time: new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })
     };
