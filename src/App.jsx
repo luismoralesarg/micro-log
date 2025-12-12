@@ -149,6 +149,22 @@ export default function App() {
         {view === 'wisdom' && <WisdomView data={data} newEntry={newEntry} setNewEntry={setNewEntry} darkMode={darkMode} onAdd={handleAddEntry} onDelete={deleteItem} onToggle={toggleHighlight} />}
         {view === 'insights' && <InsightsView data={data} tags={tags} people={people} darkMode={darkMode} />}
       </div>
+
+      <footer className={`fixed bottom-0 left-0 right-0 ${bgCard} border-t ${border} z-10`}>
+        <div className="max-w-2xl mx-auto px-4 py-3 text-center">
+          <span className={`text-xs font-mono ${textMuted}`}>
+            built by{' '}
+            <a
+              href="https://github.com/luismoralesarg/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${darkMode ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-600 hover:text-cyan-500'} hover:underline`}
+            >
+              luismo
+            </a>
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }
