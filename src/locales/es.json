@@ -106,5 +106,18 @@
   "dialog": {
     "selectVaultTitle": "Selecciona la carpeta para tu bóveda de micro.log",
     "selectVaultButton": "Seleccionar ubicación"
+  },
+  "activity": {
+    "firstTime": "primera vez",
+    "lastTime": "última vez",
+    "frequency": "frecuencia",
+    "week": "sem",
+    "highlightRate": "destacados",
+    "activityGraph": "actividad",
+    "tagsThisMonth": "etiquetas este mes",
+    "peopleThisMonth": "personas este mes",
+    "thisMonth": "este mes",
+    "entries": "entradas",
+    "allEntries": "todas las entradas"
   }
 }

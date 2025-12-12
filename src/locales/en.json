@@ -106,5 +106,18 @@
   "dialog": {
     "selectVaultTitle": "Select folder for your micro.log vault",
     "selectVaultButton": "Select Vault Location"
+  },
+  "activity": {
+    "firstTime": "first time",
+    "lastTime": "last time",
+    "frequency": "frequency",
+    "week": "wk",
+    "highlightRate": "starred",
+    "activityGraph": "activity",
+    "tagsThisMonth": "tags this month",
+    "peopleThisMonth": "people this month",
+    "thisMonth": "this month",
+    "entries": "entries",
+    "allEntries": "all entries"
   }
 }

@@ -1,4 +1,5 @@
 import { EntryItem } from '../components/ui/EntryItem';
+import { ActivityStats } from '../components/ui/ActivityStats';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export function PeopleView({ people, filter, setFilter, darkMode, formatDate, renderText, onToggle, onDelete }) {
@@ -11,12 +12,15 @@ export function PeopleView({ people, filter, setFilter, darkMode, formatDate, re
 
   if (filter) {
     const personData = people.find(([n]) => n === filter);
+    const entries = personData?.[1].entries || [];
     return (
       <div>
         <button onClick={() => setFilter(null)} className={`flex items-center gap-2 ${textMuted} mb-4 text-sm font-mono`}>← {t('people.back')}</button>
         <h2 className={`text-lg font-mono mb-4 ${personColor}`}>{filter}</h2>
+        <ActivityStats entries={entries} darkMode={darkMode} type="person" />
+        <div className={`text-xs ${textMuted} font-mono mb-2`}>{t('activity.allEntries')} ({entries.length})</div>
         <div className="space-y-0">
-          {personData?.[1].entries.sort((a, b) => b.date.localeCompare(a.date)).map(e => (
+          {entries.sort((a, b) => b.date.localeCompare(a.date)).map(e => (
             <EntryItem key={e.id} entry={e} date={e.date} type="entries" showDate darkMode={darkMode} formatDate={formatDate} renderText={renderText} onToggle={onToggle} onDelete={onDelete} />
           ))}
         </div>
