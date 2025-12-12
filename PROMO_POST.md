@@ -1,16 +1,16 @@
-# Posts Promocionales para micro.log
+# Promotional Posts for micro.log
 
 ## Twitter/X
 
 ```
-Lancé micro.log — una app minimalista de micro-journaling para desktop y web.
+I launched micro.log — a minimalist micro-journaling app for desktop and web.
 
-- Daily log con #tags y @menciones
-- Sección de sueños, notas, ideas y sabiduría
-- Modo oscuro/claro
-- 100% local y privado — sin cuentas, sin cloud, sin tracking
+- Daily log with #tags and @mentions
+- Dreams, notes, ideas & wisdom sections
+- Dark/Light mode
+- 100% local & private — no accounts, no cloud, no tracking
 
-Disponible para macOS, Windows y Linux.
+Available for macOS, Windows and Linux.
 
 https://github.com/luismoralesarg/micro-log
 ```
@@ -20,39 +20,39 @@ https://github.com/luismoralesarg/micro-log
 ## LinkedIn
 
 ```
-Quiero compartir un proyecto personal en el que estuve trabajando: micro.log
+I want to share a personal project I've been working on: micro.log
 
-Es una aplicación de micro-journaling minimalista diseñada para hacer journaling diario sin fricción. La idea es simple: escribir entradas tipo bullet, trackear ideas, registrar sueños y coleccionar aprendizajes — todo almacenado localmente en tu máquina.
+It's a minimalist micro-journaling app designed for frictionless daily journaling. The idea is simple: write bullet-style entries, track ideas, record dreams, and collect learnings — all stored locally on your machine.
 
-Características principales:
-• Daily Log con soporte para #tags y @menciones
-• Módulo de Sueños para registrar y trackear tus sueños
-• Ideas con workflow de estados (new → in progress → done)
-• Sabiduría para coleccionar citas y lecciones aprendidas
-• Insights con estadísticas y gráficos de actividad
+Key features:
+• Daily Log with #tags and @mentions support
+• Dreams module to record and track your dreams
+• Ideas with status workflow (new → in progress → done)
+• Wisdom section to collect quotes and lessons learned
+• Insights dashboard with stats and activity graphs
 
-Lo que más me importa: Privacy First — sin cuentas, sin cloud, sin tracking. Tus datos se quedan en tu máquina.
+What matters most to me: Privacy First — no accounts, no cloud, no tracking. Your data stays on your machine.
 
-Disponible como app de escritorio (macOS, Windows, Linux) o directamente en el navegador.
+Available as a desktop app (macOS, Windows, Linux) or directly in your browser.
 
 Tech stack: React 18, TailwindCSS, Vite, Electron
 
 Repo: https://github.com/luismoralesarg/micro-log
 
-Si les interesa el journaling o las apps de productividad personal, me encantaría que lo prueben y me cuenten qué les parece.
+If you're into journaling or personal productivity apps, I'd love for you to try it out and let me know what you think.
 ```
 
 ---
 
-## Versión corta (Instagram/Stories)
+## Short version (Instagram/Stories)
 
 ```
-micro.log — journaling minimalista
+micro.log — minimalist journaling
 
-- Entradas bullet
-- Tags y menciones
-- Sueños, ideas, notas
-- 100% privado y local
+- Bullet entries
+- Tags & mentions
+- Dreams, ideas, notes
+- 100% private & local
 - macOS / Windows / Linux
 
 github.com/luismoralesarg/micro-log
@@ -60,33 +60,33 @@ github.com/luismoralesarg/micro-log
 
 ---
 
-## Discord/Comunidades de devs
+## Discord/Dev Communities
 
 ```
-Hey! Comparto un proyecto que estuve desarrollando:
+Hey! Sharing a project I've been building:
 
-**micro.log** — una app de micro-journaling minimalista
+**micro.log** — a minimalist micro-journaling app
 
-Es para escribir entradas cortas tipo bullet, trackear ideas, registrar sueños y coleccionar aprendizajes. Todo se guarda local en tu máquina (privacy first, sin cloud).
+It's for writing short bullet-style entries, tracking ideas, recording dreams, and collecting learnings. Everything is stored locally on your machine (privacy first, no cloud).
 
 **Features:**
-- Daily log con #tags y @menciones
-- Módulos: Sueños, Notas, Ideas, Sabiduría
-- Dashboard de insights con estadísticas
+- Daily log with #tags and @mentions
+- Modules: Dreams, Notes, Ideas, Wisdom
+- Insights dashboard with statistics
 - Dark/Light mode
-- Bilingüe (EN/ES)
+- Bilingual (EN/ES)
 
 **Tech:** React 18 + TailwindCSS + Vite + Electron
 
-**Disponible:** macOS, Windows, Linux + Web
+**Available:** macOS, Windows, Linux + Web
 
 Repo: <https://github.com/luismoralesarg/micro-log>
 
-Feedback bienvenido!
+Feedback welcome!
 ```
 
 ---
 
-## Link directo al repositorio
+## Direct link to repository
 
 https://github.com/luismoralesarg/micro-log
