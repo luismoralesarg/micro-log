@@ -1,6 +1,8 @@
 {
   "name": "micro-log",
   "version": "1.0.0",
+  "description": "Aplicación de registro de actividades",
+  "author": "Chengue",
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
@@ -38,15 +40,16 @@
     "files": ["dist/**/*", "electron/**/*"],
     "mac": {
       "category": "public.app-category.productivity",
-      "icon": "public/icon.icns",
+      "icon": "dist/icon.icns",
       "target": ["dmg", "zip"]
     },
     "win": {
-      "icon": "public/icon.ico",
-      "target": ["nsis", "portable"]
+      "icon": "dist/icon.ico",
+      "target": ["nsis", "portable"],
+      "signAndEditExecutable": false
     },
     "linux": {
-      "icon": "public/icon.png",
+      "icon": "dist/icon.png",
       "target": ["AppImage", "deb"],
       "category": "Office"
     }
