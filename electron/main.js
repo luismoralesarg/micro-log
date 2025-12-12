@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, shell, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -65,13 +65,22 @@ const initializeVault = (vaultPath) => {
 };
 
 function createWindow() {
+  // Remove menu bar on Windows
+  Menu.setApplicationMenu(null);
+
+  const iconPath = isDev
+    ? path.join(__dirname, '../public/icon.ico')
+    : path.join(__dirname, '../dist/icon.ico');
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 700,
     minWidth: 400,
     minHeight: 500,
+    icon: iconPath,
     titleBarStyle: 'hiddenInset',
     trafficLightPosition: { x: 15, y: 15 },
+    autoHideMenuBar: true,
     backgroundColor: '#0a0a0a',
     webPreferences: {
       nodeIntegration: false,
