@@ -1,4 +1,7 @@
+import { useLanguage } from '../contexts/LanguageContext';
+
 export function WisdomView({ data, newEntry, setNewEntry, darkMode, onAdd, onDelete, onToggle }) {
+  const { t } = useLanguage();
   const text = darkMode ? 'text-neutral-100' : 'text-neutral-900';
   const textMuted = darkMode ? 'text-neutral-500' : 'text-neutral-400';
   const textSoft = darkMode ? 'text-neutral-400' : 'text-neutral-600';
@@ -8,14 +11,14 @@ export function WisdomView({ data, newEntry, setNewEntry, darkMode, onAdd, onDel
   return (
     <>
       <div className="mb-6">
-        <textarea value={newEntry} onChange={(e) => setNewEntry(e.target.value)} placeholder="a quote, thought, or lesson..."
+        <textarea value={newEntry} onChange={(e) => setNewEntry(e.target.value)} placeholder={t('wisdom.placeholder')}
           className={`w-full ${bgCard} border ${border} rounded outline-none p-4 ${text} placeholder:${textMuted} min-h-[80px] resize-none font-mono text-sm italic`} />
-        <button onClick={onAdd} disabled={!newEntry.trim()} className={`mt-2 px-4 py-2 ${darkMode ? 'bg-neutral-800' : 'bg-neutral-900'} text-white rounded text-xs font-mono disabled:opacity-30`}>save</button>
+        <button onClick={onAdd} disabled={!newEntry.trim()} className={`mt-2 px-4 py-2 ${darkMode ? 'bg-neutral-800' : 'bg-neutral-900'} text-white rounded text-xs font-mono disabled:opacity-30`}>{t('wisdom.save')}</button>
       </div>
 
       <div className="space-y-3">
         {data.wisdom.length === 0 ? (
-          <p className={`text-center py-12 ${textMuted} text-sm font-mono`}>collect wisdom here</p>
+          <p className={`text-center py-12 ${textMuted} text-sm font-mono`}>{t('wisdom.empty')}</p>
         ) : data.wisdom.slice().reverse().map(w => (
           <div key={w.id} className={`group ${bgCard} p-4 rounded border ${border}`}>
             <p className={`${textSoft} italic font-mono text-sm whitespace-pre-wrap`}>"{w.text}"</p>

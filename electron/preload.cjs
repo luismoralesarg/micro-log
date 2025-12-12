@@ -15,6 +15,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listFiles: (relativePath) => ipcRenderer.invoke('list-files', relativePath),
   ensureDir: (relativePath) => ipcRenderer.invoke('ensure-dir', relativePath),
 
+  // Language settings
+  getLanguage: () => ipcRenderer.invoke('get-language'),
+  setLanguage: (lang) => ipcRenderer.invoke('set-language', lang),
+
   // Check if running in Electron
   isElectron: true
 });

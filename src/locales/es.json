@@ -1,0 +1,110 @@
+{
+  "app": {
+    "name": "micro.log",
+    "loading": "cargando..."
+  },
+  "nav": {
+    "log": "diario",
+    "dreams": "sueños",
+    "tags": "etiquetas",
+    "people": "personas",
+    "notes": "notas",
+    "ideas": "ideas",
+    "quotes": "citas",
+    "stats": "stats"
+  },
+  "header": {
+    "vault": "bóveda",
+    "light": "claro",
+    "dark": "oscuro"
+  },
+  "dates": {
+    "today": "hoy",
+    "yesterday": "ayer"
+  },
+  "weekdays": {
+    "su": "do",
+    "mo": "lu",
+    "tu": "ma",
+    "we": "mi",
+    "th": "ju",
+    "fr": "vi",
+    "sa": "sá"
+  },
+  "journal": {
+    "placeholder": "escribe...",
+    "empty": "sin entradas"
+  },
+  "dreams": {
+    "title": "sueños",
+    "placeholder": "soñé...",
+    "empty": "sin sueños registrados"
+  },
+  "tags": {
+    "back": "volver",
+    "empty": "usa #etiquetas en tus entradas"
+  },
+  "people": {
+    "back": "volver",
+    "empty": "menciona @personas en tus entradas"
+  },
+  "notes": {
+    "placeholder": "escribe una nota...",
+    "save": "guardar",
+    "empty": "sin notas aún",
+    "delete": "eliminar"
+  },
+  "ideas": {
+    "placeholder": "nueva idea...",
+    "empty": "sin ideas aún",
+    "statusNew": "nueva",
+    "statusWip": "en progreso",
+    "statusDone": "hecha"
+  },
+  "wisdom": {
+    "placeholder": "una cita, pensamiento o lección...",
+    "save": "guardar",
+    "empty": "colecciona sabiduría aquí"
+  },
+  "insights": {
+    "entries": "entradas",
+    "words": "palabras",
+    "starred": "destacadas",
+    "streak": "racha",
+    "best": "mejor",
+    "last30days": "últimos 30 días",
+    "byWeekday": "por día",
+    "dreams": "sueños",
+    "notes": "notas",
+    "ideas": "ideas",
+    "done": "hechas",
+    "quotes": "citas",
+    "topTags": "top etiquetas",
+    "topPeople": "top personas"
+  },
+  "setup": {
+    "welcome": "bienvenido a tu diario personal",
+    "description": "Elige dónde guardar tus entradas. Todos tus datos se guardarán como archivos locales que te pertenecen.",
+    "vaultLocation": "ubicación de bóveda",
+    "changeLocation": "cambiar ubicación",
+    "selectFolder": "seleccionar carpeta...",
+    "createVault": "crear bóveda",
+    "creatingVault": "creando bóveda...",
+    "failedToSelect": "Error al seleccionar carpeta",
+    "failedToCreate": "Error al crear bóveda",
+    "structureInfo": "esto creará la siguiente estructura:",
+    "folderJournal": "entradas diarias",
+    "folderDreams": "diario de sueños",
+    "folderNotes": "notas rápidas",
+    "folderIdeas": "seguimiento de ideas",
+    "folderWisdom": "citas y sabiduría",
+    "folderConfig": "configuración"
+  },
+  "confirm": {
+    "changeVault": "¿Estás seguro de que quieres cambiar la ubicación de la bóveda? Tus datos actuales permanecerán en su ubicación."
+  },
+  "dialog": {
+    "selectVaultTitle": "Selecciona la carpeta para tu bóveda de micro.log",
+    "selectVaultButton": "Seleccionar ubicación"
+  }
+}

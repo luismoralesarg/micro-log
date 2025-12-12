@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function SetupView({ darkMode, onSetupComplete }) {
+  const { t } = useLanguage();
   const [selectedPath, setSelectedPath] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +21,7 @@ export function SetupView({ darkMode, onSetupComplete }) {
         setError(null);
       }
     } catch (e) {
-      setError('Failed to select folder');
+      setError(t('setup.failedToSelect'));
     }
   };
 
@@ -32,10 +34,10 @@ export function SetupView({ darkMode, onSetupComplete }) {
     try {
       const result = await onSetupComplete(selectedPath);
       if (!result.success) {
-        setError(result.error || 'Failed to create vault');
+        setError(result.error || t('setup.failedToCreate'));
       }
     } catch (e) {
-      setError('Failed to create vault');
+      setError(t('setup.failedToCreate'));
     } finally {
       setIsCreating(false);
     }
@@ -45,21 +47,21 @@ export function SetupView({ darkMode, onSetupComplete }) {
     <div className={`min-h-screen ${bg} flex items-center justify-center p-4`}>
       <div className={`${bgCard} border ${border} rounded-lg p-8 max-w-md w-full`}>
         <div className="text-center mb-8">
-          <h1 className={`text-xl font-mono ${text} mb-2`}>micro.log</h1>
+          <h1 className={`text-xl font-mono ${text} mb-2`}>{t('app.name')}</h1>
           <p className={`text-sm font-mono ${textMuted}`}>
-            welcome to your personal journal
+            {t('setup.welcome')}
           </p>
         </div>
 
         <div className="space-y-6">
           <div>
             <p className={`text-sm font-mono ${text} mb-4`}>
-              Choose where to store your journal entries. All your data will be saved as local files that you own.
+              {t('setup.description')}
             </p>
           </div>
 
           <div className={`border ${border} rounded-lg p-4`}>
-            <p className={`text-xs font-mono ${textMuted} mb-3`}>vault location</p>
+            <p className={`text-xs font-mono ${textMuted} mb-3`}>{t('setup.vaultLocation')}</p>
 
             {selectedPath ? (
               <div className="space-y-3">
@@ -68,7 +70,7 @@ export function SetupView({ darkMode, onSetupComplete }) {
                   onClick={handleSelectFolder}
                   className={`text-xs font-mono ${textMuted} hover:${text} transition-colors`}
                 >
-                  change location
+                  {t('setup.changeLocation')}
                 </button>
               </div>
             ) : (
@@ -76,7 +78,7 @@ export function SetupView({ darkMode, onSetupComplete }) {
                 onClick={handleSelectFolder}
                 className={`w-full py-3 px-4 border ${border} border-dashed rounded-lg text-sm font-mono ${textMuted} hover:border-neutral-500 hover:${text} transition-colors`}
               >
-                select folder...
+                {t('setup.selectFolder')}
               </button>
             )}
           </div>
@@ -93,19 +95,19 @@ export function SetupView({ darkMode, onSetupComplete }) {
                 : `${darkMode ? 'bg-neutral-800 text-neutral-600' : 'bg-neutral-200 text-neutral-400'} cursor-not-allowed`
               }`}
           >
-            {isCreating ? 'creating vault...' : 'create vault'}
+            {isCreating ? t('setup.creatingVault') : t('setup.createVault')}
           </button>
 
           <div className={`text-xs font-mono ${textMuted} space-y-2`}>
-            <p>this will create the following structure:</p>
+            <p>{t('setup.structureInfo')}</p>
             <pre className={`${darkMode ? 'bg-neutral-800' : 'bg-neutral-100'} rounded p-3 overflow-x-auto`}>
 {`your-folder/
-├── journal/     # daily entries
-├── dreams/      # dream journal
-├── notes/       # quick notes
-├── ideas/       # idea tracker
-├── wisdom/      # quotes & wisdom
-└── .microlog/   # app config`}
+├── journal/     # ${t('setup.folderJournal')}
+├── dreams/      # ${t('setup.folderDreams')}
+├── notes/       # ${t('setup.folderNotes')}
+├── ideas/       # ${t('setup.folderIdeas')}
+├── wisdom/      # ${t('setup.folderWisdom')}
+└── .microlog/   # ${t('setup.folderConfig')}`}
             </pre>
           </div>
         </div>

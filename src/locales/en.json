@@ -1,0 +1,110 @@
+{
+  "app": {
+    "name": "micro.log",
+    "loading": "loading..."
+  },
+  "nav": {
+    "log": "log",
+    "dreams": "dreams",
+    "tags": "tags",
+    "people": "people",
+    "notes": "notes",
+    "ideas": "ideas",
+    "quotes": "quotes",
+    "stats": "stats"
+  },
+  "header": {
+    "vault": "vault",
+    "light": "light",
+    "dark": "dark"
+  },
+  "dates": {
+    "today": "today",
+    "yesterday": "yesterday"
+  },
+  "weekdays": {
+    "su": "su",
+    "mo": "mo",
+    "tu": "tu",
+    "we": "we",
+    "th": "th",
+    "fr": "fr",
+    "sa": "sa"
+  },
+  "journal": {
+    "placeholder": "log...",
+    "empty": "no entries"
+  },
+  "dreams": {
+    "title": "dreams",
+    "placeholder": "dream...",
+    "empty": "no dreams recorded"
+  },
+  "tags": {
+    "back": "back",
+    "empty": "use #tags in your entries"
+  },
+  "people": {
+    "back": "back",
+    "empty": "mention @people in your entries"
+  },
+  "notes": {
+    "placeholder": "write a note...",
+    "save": "save",
+    "empty": "no notes yet",
+    "delete": "delete"
+  },
+  "ideas": {
+    "placeholder": "new idea...",
+    "empty": "no ideas yet",
+    "statusNew": "new",
+    "statusWip": "in progress",
+    "statusDone": "done"
+  },
+  "wisdom": {
+    "placeholder": "a quote, thought, or lesson...",
+    "save": "save",
+    "empty": "collect wisdom here"
+  },
+  "insights": {
+    "entries": "entries",
+    "words": "words",
+    "starred": "starred",
+    "streak": "streak",
+    "best": "best",
+    "last30days": "last 30 days",
+    "byWeekday": "by weekday",
+    "dreams": "dreams",
+    "notes": "notes",
+    "ideas": "ideas",
+    "done": "done",
+    "quotes": "quotes",
+    "topTags": "top tags",
+    "topPeople": "top people"
+  },
+  "setup": {
+    "welcome": "welcome to your personal journal",
+    "description": "Choose where to store your journal entries. All your data will be saved as local files that you own.",
+    "vaultLocation": "vault location",
+    "changeLocation": "change location",
+    "selectFolder": "select folder...",
+    "createVault": "create vault",
+    "creatingVault": "creating vault...",
+    "failedToSelect": "Failed to select folder",
+    "failedToCreate": "Failed to create vault",
+    "structureInfo": "this will create the following structure:",
+    "folderJournal": "daily entries",
+    "folderDreams": "dream journal",
+    "folderNotes": "quick notes",
+    "folderIdeas": "idea tracker",
+    "folderWisdom": "quotes & wisdom",
+    "folderConfig": "app config"
+  },
+  "confirm": {
+    "changeVault": "Are you sure you want to change vault location? Your current data will remain in its location."
+  },
+  "dialog": {
+    "selectVaultTitle": "Select folder for your micro.log vault",
+    "selectVaultButton": "Select Vault Location"
+  }
+}
